@@ -17,11 +17,21 @@ app.use(express.static("public"));
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workoutdb", { useNewUrlParser: true });
 
 // getlastworkouts
-///api/workouts
-app.get("/wieght", (req, res) => {
-  db.Workout.find({})
-    .then(dbUser => {
-      res.json(dbUser);
+app.get("/api/workouts", (req, res) => {
+  Workout.find({})
+    .then(dbworkout => {
+      res.json(dbworkout);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+// getworkouts in range 
+app.get("/api/workouts/range", (req, res) => {
+  Workout.find({})
+    .then(dbworkout => {
+      res.json(dbworkout);
     })
     .catch(err => {
       res.json(err);
@@ -29,9 +39,8 @@ app.get("/wieght", (req, res) => {
 });
 
 //add excercise
-//api/workouts/" + id
-app.put("/update", ({ body }, res) => {
-  db.Workout.create(body)
+app.put("/api/workouts/:id", ({ body }, res) => {
+  Workout.create(body)
     .then(dbworkout => {
       res.json(dbworkout);
     })
@@ -41,9 +50,8 @@ app.put("/update", ({ body }, res) => {
 });
 
 //createWorkout
-///api/workouts
-app.post("/create", ({ body }, res) => {
-  db.Workout.create(body)
+app.post("/api/workouts", ({ body }, res) => {
+  Workout.create(body)
     .then(dbworkout => {
       res.json(dbworkout);
     })
@@ -52,22 +60,22 @@ app.post("/create", ({ body }, res) => {
     });
 });
 
-// /api/workouts/range
-// getworkouts in range 
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname + './public/index.html'));
+});
+
+app.get('/stats', function(req, res) {
+  res.sendFile(path.join(__dirname + './public/stats.html'));
+});
+
+app.get('/exercise', function(req, res) {
+  res.sendFile(path.join(__dirname + './public/exercise.html'));
+});
+
+app.get('/exercise?', function(req, res) {
+  res.sendFile(path.join(__dirname + './public/exercise.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
 });
-
-
-/* 
-When the user loads the page, they should be given the option to create a new workout, or continue with their last workout.
-
-The user should be able to:
-
-Add exercises to a previous workout plan.
-
-Add new exercises to a new workout plan.
-
-View multiple the combined weight of multiple exercises on the stats page.
-*/
