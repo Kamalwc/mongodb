@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Workout = require("../models/Workout.js");
+const Workout = require("../models/workout");
 
 router.post("/api/workouts", (req, res) => {
   Workout.create({})
@@ -15,7 +15,7 @@ router.put("/api/workouts/:id", ({ body, params }, res) => {
   Workout.findByIdAndUpdate(
     params.id,
     { $push: { exercises: body } },
-    // "runValidators" will ensure new exercises meet our schema requirements
+    
     { new: true, runValidators: true }
   )
     .then(dbWorkout => {
